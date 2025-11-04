@@ -7,7 +7,6 @@ import (
 	"runtime"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zjutjh/mygo/foundation/reply"
 	"github.com/zjutjh/mygo/kit"
 	"github.com/zjutjh/mygo/ndb"
 	"github.com/zjutjh/mygo/nlog"
@@ -32,8 +31,8 @@ type RegisterApi struct {
 
 type RegisterApiRequest struct {
 	Query struct {
-		Username    string `form:"username"`
-		ContainerId string `form:"container_id"`
+		Username    string `form:"username" binding:"required"`
+		ContainerId string `form:"container_id" binding:"required"`
 	}
 }
 
@@ -71,15 +70,15 @@ func hfRegister(ctx *gin.Context) {
 	err := api.Init(ctx)
 	if err != nil {
 		nlog.Pick().WithContext(ctx).WithError(err).Warn("参数绑定校验错误")
-		reply.Fail(ctx, comm.CodeParameterInvalid)
+		ctx.String(400, "登录失败")
 		return
 	}
 	code := api.Run(ctx)
 	if !ctx.IsAborted() {
 		if code == comm.CodeOK {
-			reply.Success(ctx, api.Response)
+			ctx.String(200, "ok")
 		} else {
-			reply.Fail(ctx, code)
+			ctx.String(400, "登录失败")
 		}
 	}
 }

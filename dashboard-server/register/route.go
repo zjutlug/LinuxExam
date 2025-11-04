@@ -39,7 +39,7 @@ func routeBase(r *gin.RouterGroup, router *gin.Engine) {
 	r.GET("/health", api.HealthHandler())
 	r.GET("/dashboard", dashboard.ScoreHandler())
 
-	r.GET("/user/register", user.RegisterHandler())
+	r.POST("/user/register", user.RegisterHandler())
 	r.POST("/user/verify", user.VerifyHandler())
 	r.POST("/user/info", user.InfoHandler())
 }

@@ -1,4 +1,4 @@
-# syntax = docker/dockerfile:experimental
+# syntax = docker/Dockerfile:experimental
 
 # 构建阶段
 FROM golang:1.24.7-alpine AS builder
