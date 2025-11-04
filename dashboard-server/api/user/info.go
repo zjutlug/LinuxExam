@@ -34,6 +34,7 @@ type InfoApiRequest struct {
 		ContainerID string `form:"container_id" binding:"required"` // 容器ID
 	}
 }
+
 type ProblemResp struct {
 	ID    int64  `json:"id"`    // 题目ID
 	Score int    `json:"score"` // 分数
@@ -43,7 +44,8 @@ type InfoApiResponse struct {
 	Username          string         `json:"username"`           // 用户名
 	TotalScore        int            `json:"total_score"`        // 总分
 	LastSubmitTime    time.Time      `json:"last_submit"`        // 最后提交时间
-	CompletedProblems []*ProblemResp `json:"completed_problems"` // 已完成的题目ID列表
+	CompletedProblems []*ProblemResp `json:"completed_problems"` // 已完成的题目列表
+	AllProblems       []*ProblemResp `json:"all_problems"`       // 所有题目列表
 }
 
 // Run Api业务逻辑执行点
@@ -70,7 +72,8 @@ func (i *InfoApi) Run(ctx *gin.Context) kit.Code {
 		Username:          user.Username,
 		TotalScore:        0,
 		LastSubmitTime:    time.Time{},
-		CompletedProblems: make([]*ProblemResp, 0, len(submissions)), // 预分配容量
+		CompletedProblems: make([]*ProblemResp, 0, len(submissions)),
+		AllProblems:       make([]*ProblemResp, 0, len(comm.BizConf.Problems)),
 	}
 
 	// 计算总分和更新最后提交时间
@@ -89,6 +92,15 @@ func (i *InfoApi) Run(ctx *gin.Context) kit.Code {
 				Name:  p.Name,
 			})
 		}
+	}
+
+	// 添加所有题目信息
+	for _, p := range comm.BizConf.Problems {
+		i.Response.AllProblems = append(i.Response.AllProblems, &ProblemResp{
+			ID:    p.Id,
+			Score: p.Score,
+			Name:  p.Name,
+		})
 	}
 
 	return comm.CodeOK
