@@ -72,7 +72,7 @@ func (s *ScoreApi) Run(ctx *gin.Context) kit.Code {
 		userScoreMap[user.ContainerID] = &ScoreResp{
 			Username:   user.Username,
 			Score:      0,
-			LastSubmit: time.Time{}, // 初始化为零值时间
+			LastSubmit: user.UpdatedAt, // 初始化为零值时间
 		}
 	}
 

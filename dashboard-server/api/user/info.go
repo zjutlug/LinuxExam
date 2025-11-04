@@ -71,7 +71,7 @@ func (i *InfoApi) Run(ctx *gin.Context) kit.Code {
 	i.Response = InfoApiResponse{
 		Username:          user.Username,
 		TotalScore:        0,
-		LastSubmitTime:    time.Time{},
+		LastSubmitTime:    user.UpdatedAt,
 		CompletedProblems: make([]*ProblemResp, 0, len(submissions)),
 		AllProblems:       make([]*ProblemResp, 0, len(comm.BizConf.Problems)),
 	}
