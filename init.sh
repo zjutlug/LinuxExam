@@ -31,9 +31,6 @@ print_system_info() {
 # 环境变量输出函数
 print_env_vars() {
     log "=================== 系统环境变量 ==================="
-#    env | while read -r line; do
-#        log "$line"
-#    done
     while read -r line; do
         log "$line"
     done < /etc/environment
@@ -63,15 +60,8 @@ print_env_vars
 
 # 启动SSH服务
 log "启动SSH服务..."
-log "SSH配置信息:"
-log "- 允许用户: exam"
-
 /usr/sbin/sshd -D &
-SSH_PID=$!
-
-# 设置信号处理
-trap 'kill $SSH_PID; exit 0' SIGTERM SIGINT
 
 # 等待SSH服务
 log "容器初始化完成，等待SSH连接..."
-wait $SSH_PID
+sleep infinity

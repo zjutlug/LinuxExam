@@ -10,10 +10,13 @@ RUN go mod download
 RUN CGO_ENABLED=0 GOOS=linux go build -o exam-cli
 
 # Final stage
-FROM debian:bookworm-slim
+FROM ubuntu:20.04
 
 RUN apt-get update && \
     apt-get install -y bash openssh-server uuid-runtime && \
+    apt install -y software-properties-common && \
+    add-apt-repository -y ppa:neurobin/ppa && \
+    apt install -y shc gcc openssh-server vim nano screen tmux curl && \
     mkdir /run/sshd && \
     rm -rf /var/lib/apt/lists/*
 
