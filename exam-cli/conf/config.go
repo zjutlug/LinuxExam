@@ -1,4 +1,4 @@
-package cmd
+package conf
 
 import (
 	"os"
@@ -14,6 +14,10 @@ type Config struct {
 }
 
 var conf *Config
+
+func Pick() *Config {
+	return conf
+}
 
 func init() {
 	viper.AutomaticEnv()

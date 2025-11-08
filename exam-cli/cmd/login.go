@@ -3,6 +3,7 @@ package cmd
 import (
 	"bufio"
 	"exam-cli/comm"
+	"exam-cli/conf"
 	"fmt"
 	"net/url"
 	"os"
@@ -15,16 +16,17 @@ import (
 )
 
 var loginCmd = &cobra.Command{
-	Use:   "login",
-	Short: "登录终端",
+	Use:    "login",
+	Short:  "登录终端",
+	Hidden: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		// 检查是否已经注册
 		var response comm.InfoResponse
 		client := resty.New()
 		_, err := client.R().
-			SetQueryParam("container_id", conf.ContainerId).
+			SetQueryParam("container_id", conf.Pick().ContainerId).
 			SetResult(&response).
-			Post(conf.APIBaseURL + "/api/user/info")
+			Post(conf.Pick().APIBaseURL + "/api/user/info")
 		if err == nil && response.Code == 0 {
 			fmt.Println("欢迎回来, " + response.Data.Username)
 			enterShell()
@@ -53,13 +55,13 @@ var loginCmd = &cobra.Command{
 			client := resty.New()
 			params := url.Values{}
 			params.Add("username", name)
-			params.Add("container_id", conf.ContainerId)
+			params.Add("container_id", conf.Pick().ContainerId)
 			_, err = client.R().
 				SetBody(map[string]interface{}{
 					"username":     name,
-					"container_id": conf.ContainerId,
+					"container_id": conf.Pick().ContainerId,
 				}).
-				Post(conf.APIBaseURL + "/api/user/register")
+				Post(conf.Pick().APIBaseURL + "/api/user/register")
 
 			if err != nil {
 				fmt.Printf("注册失败: %v\n", err)

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"exam-cli/conf"
 	"fmt"
 	"strconv"
 
@@ -25,13 +26,13 @@ var verifyCmd = &cobra.Command{
 		}
 		answer := args[1]
 
-		url := conf.APIBaseURL + "/api/user/verify"
+		url := conf.Pick().APIBaseURL + "/api/user/verify"
 
 		client := resty.New()
 		var resp response
 		_, err = client.R().
 			SetBody(map[string]interface{}{
-				"container_id": conf.ContainerId,
+				"container_id": conf.Pick().ContainerId,
 				"problem_id":   problemID,
 				"answer":       answer,
 			}).

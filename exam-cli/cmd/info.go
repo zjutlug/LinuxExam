@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"exam-cli/comm"
+	"exam-cli/conf"
 	"fmt"
 
 	"github.com/go-resty/resty/v2"
@@ -15,12 +16,12 @@ var infoCmd = &cobra.Command{
 		var response comm.InfoResponse
 		client := resty.New()
 		_, err := client.R().
-			SetQueryParam("container_id", conf.ContainerId).
+			SetQueryParam("container_id", conf.Pick().ContainerId).
 			SetResult(&response).
-			Post(conf.APIBaseURL + "/api/user/info")
+			Post(conf.Pick().APIBaseURL + "/api/user/info")
 
 		if err != nil {
-			fmt.Println("Error sending request:", err)
+			fmt.Println("信息获取失败")
 			return
 		}
 
